@@ -1,0 +1,794 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset=utf8>
+  <meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+/* Bootstrap 5 integration: retain Aurevia's original field appearance. */
+.field .form-control,.field .form-select{
+  min-height:46px;padding:10px 12px;border:1.5px solid var(--line);
+  border-radius:10px;background-color:var(--surface);color:var(--ink);
+  font:inherit;box-shadow:none;
+}
+.field .form-control:focus,.field .form-select:focus{
+  border-color:var(--gold);box-shadow:0 0 0 .2rem color-mix(in srgb,var(--gold) 20%,transparent);
+}
+
+</style><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="img/aurevia-l.PNG">
+</head>
+
+
+
+<body>
+<title>Aurevia Health</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: full-bleed navy and white bands, one centred column inside each. Audiogram is the hero image. */
+:root{
+  --bg:#F5F7FA;--surface:#FFFFFF;--ink:#0B1F3A;--muted:#52627B;--line:#DCE3EC;
+  --navy:#0B1F3A;--navy-2:#15305A;--gold:#C9A24B;--gold-ink:#7E5B0C;--btn-ink:#0B1F3A;
+  --on-navy:#F3F6FB;--on-navy-2:#B7C4D8;
+  --ok:#1F7A4D;--ok-bg:#E1F2E8;--warn:#85560A;--warn-bg:#FAEFD3;--bad:#A1302B;--bad-bg:#F8E2E0;--info:#1E5AA8;--info-bg:#E2ECF8;
+  --f-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --f-body:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#07142A;--surface:#0E2240;--ink:#EAF0F8;--muted:#9DB0CA;--line:#223A5E;
+  --navy:#0C2147;--navy-2:#16315C;--gold:#D9B35E;--gold-ink:#E2BE70;
+  --ok:#62D49D;--ok-bg:#12372A;--warn:#F0C766;--warn-bg:#3A2D0E;--bad:#F29C96;--bad-bg:#3E1A19;--info:#8DB8F0;--info-bg:#162E52;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#07142A;--surface:#0E2240;--ink:#EAF0F8;--muted:#9DB0CA;--line:#223A5E;
+  --navy:#0C2147;--navy-2:#16315C;--gold:#D9B35E;--gold-ink:#E2BE70;
+  --ok:#62D49D;--ok-bg:#12372A;--warn:#F0C766;--warn-bg:#3A2D0E;--bad:#F29C96;--bad-bg:#3E1A19;--info:#8DB8F0;--info-bg:#162E52;
+  color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+h1,h2,h3{font-family:var(--f-display);font-weight:500;line-height:1.15;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.1rem,6.2vw,3.6rem)}h2{font-size:clamp(1.6rem,4vw,2.3rem)}h3{font-size:1.2rem}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:56px}
+.wrap.tight{padding-block:32px}
+.band-navy{background:var(--navy);color:var(--on-navy)}
+.band-surface{background:var(--surface);border-block:1px solid var(--line)}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+.band-navy .eyebrow{color:var(--gold)}
+.lede{font-size:1.1rem;color:var(--muted);max-width:60ch}
+.band-navy .lede{color:var(--on-navy-2)}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:31;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:10px;display:flex;align-items:center;gap:16px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-size:1.3rem;font-weight:600;letter-spacing:-.01em}
+.mark{width:30px;height:30px;flex:none}
+.brand small{display:block;font-family:var(--f-body);font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-ink);margin-top:-2px}
+nav.main{display:flex;gap:4px;align-items:center}
+nav.main a{padding:8px 10px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.92rem;color:var(--muted)}
+nav.main a:hover{color:var(--ink)}
+nav.main a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--gold)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-weight:600;cursor:pointer}
+@media (max-width:900px){
+  .menu-btn{display:block}
+  nav.main{display:none;position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;padding:8px max(16px,env(safe-area-inset-left,0px)) 12px}
+  nav.main.open{display:flex}
+  nav.main a{padding:12px 8px}
+  .top .hide-s{display:none}
+}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 20px;border-radius:999px;border:1.5px solid transparent;font-weight:700;font-size:.95rem;cursor:pointer;text-decoration:none;line-height:1.2;transition:transform .12s,background .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--btn-ink)}
+.btn.gold:hover{background:color-mix(in srgb,var(--gold) 88%,white)}
+.btn.line{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn.line:hover{border-color:var(--gold)}
+.band-navy .btn.line{border-color:rgba(243,246,251,.35);color:var(--on-navy)}
+.btn.navy{background:var(--navy);color:var(--on-navy)}
+.btn.sm{min-height:36px;padding:6px 14px;font-size:.85rem}
+.btn.danger{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .tagline{display:flex;flex-direction:column}
+.audiogram{width:100%;height:auto;max-width:460px;justify-self:center}
+.audiogram text{font-family:var(--f-body);font-size:11px;fill:#B7C4D8}
+.audiogram .t{fill:#F3F6FB;font-size:12px;font-weight:700}
+@media (max-width:820px){.hero{grid-template-columns:1fr}.audiogram{max-width:380px}}
+
+/* cards + grids */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}
+.tile{display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:border-color .12s,transform .12s;min-width:0}
+.tile:hover{border-color:var(--gold);transform:translateY(-2px)}
+.tile b{font-family:var(--f-display);font-weight:500;font-size:1.15rem}
+.tile span{color:var(--muted);font-size:.9rem}
+.tile .go{margin-top:6px;color:var(--gold-ink);font-weight:700;font-size:.85rem;display:flex;gap:6px;align-items:center}
+.section-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.steps3{counter-reset:s;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.steps3 li{list-style:none;counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.steps3 li::before{content:counter(s);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold);font-weight:700;margin-bottom:12px}
+.steps3{padding:0;margin:0}
+.why{display:flex;gap:14px;align-items:flex-start}
+.why .ic{width:22px;height:22px;color:var(--gold-ink);margin-top:3px}
+.placeholder{border:1.5px dashed var(--line);border-radius:14px;padding:22px;color:var(--muted);background:transparent}
+.ph-tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--warn-bg);color:var(--warn);border-radius:6px;padding:2px 8px;margin-bottom:8px}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-family:var(--f-display);font-size:1.4rem}
+.cta{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+
+/* services */
+.svc{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
+.svc ul{margin:10px 0 0;padding-left:1.1rem;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;font-size:.78rem;font-weight:700;padding:3px 10px;background:var(--info-bg);color:var(--info);white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}.pill.gray{background:var(--line);color:var(--muted)}
+@media (max-width:640px){.svc{grid-template-columns:1fr}}
+.aid-art{background:var(--navy);border-radius:10px;height:130px;display:grid;place-items:center;margin-bottom:14px}
+.aid-art svg{width:90px;height:90px}
+.aid li{margin-bottom:4px}
+.aid ul{padding-left:1.1rem;margin:10px 0 16px;color:var(--muted)}
+
+/* blog */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.post>button{all:unset;display:block;box-sizing:border-box;width:100%;padding:20px 22px;cursor:pointer}
+.post>button:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
+.post h3{margin:6px 0}
+.post .body{padding:0 22px 22px;display:flex;flex-direction:column;gap:12px;max-width:68ch}
+.post .body p{color:var(--ink)}
+
+/* contact */
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 14px}
+.kv dt{color:var(--muted);font-weight:600;font-size:.9rem}.kv dd{margin:0;overflow-wrap:anywhere}
+
+/* footer */
+footer .wrap{padding-block:36px;display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+footer a{color:var(--on-navy-2);text-decoration:none;display:block;padding:3px 0}
+footer a:hover{color:var(--on-navy)}
+footer h3{font-size:1rem;color:var(--on-navy);margin-bottom:8px;font-family:var(--f-body);font-weight:700}
+footer p{color:var(--on-navy-2);font-size:.92rem}
+
+/* whatsapp float */
+.wa{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.wa-btn{display:flex;align-items:center;gap:8px;background:#1FA855;color:#fff;border:none;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.wa-btn .ic{stroke:#fff}
+.wa-menu{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.2);min-width:230px}
+.wa-menu a{display:block;padding:10px 12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.92rem}
+.wa-menu a:hover{background:var(--bg)}
+.wa-menu small{display:block;padding:6px 12px 2px;color:var(--muted)}
+@media (max-width:420px){.wa-btn span{display:none}.wa-btn{padding:14px}}
+
+/* booking */
+.booking{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+@media (max-width:860px){.booking{grid-template-columns:1fr}}
+.progress{display:flex;gap:6px;margin:8px 0 22px}
+.progress i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.progress i.on{background:var(--gold)}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer}
+.opt:hover{border-color:var(--gold)}
+.opt b{display:block}.opt span{color:var(--muted);font-size:.88rem}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.days .h{font-size:.72rem;font-weight:700;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.06em}
+.day{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;padding:4px 2px;line-height:1.15}
+.day b{font-size:1rem}.day small{font-size:.66rem;color:var(--muted)}
+.day:hover:not([disabled]){border-color:var(--gold)}
+.day[disabled]{opacity:.38;cursor:not-allowed;background:transparent}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.time{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:700;cursor:pointer}
+.time:hover{border-color:var(--gold);background:var(--bg)}
+.summary{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px)}
+.summary dl{margin:12px 0 0;display:grid;gap:10px}
+.summary dt{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.summary dd{margin:0;font-weight:600}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-weight:700;font-size:.88rem}
+.field input,.field select,.field textarea{width:100%;min-height:46px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface)}
+.field textarea{min-height:90px;resize:vertical}
+.field .err{color:var(--bad);font-size:.82rem;min-height:1em}
+.field.bad input,.field.bad select,.field.bad textarea{border-color:var(--bad)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.9rem}
+.check input{width:20px;height:20px;margin-top:2px;flex:none}
+.refbox{background:var(--navy);color:var(--on-navy);border-radius:14px;padding:24px;text-align:center}
+.refbox b{display:block;font-family:var(--f-display);font-size:2.2rem;letter-spacing:.06em;color:var(--gold)}
+.notice{border-radius:10px;padding:12px 14px;font-size:.92rem;background:var(--info-bg);color:var(--info)}
+.notice.warn{background:var(--warn-bg);color:var(--warn)}.notice.bad{background:var(--bad-bg);color:var(--bad)}.notice.ok{background:var(--ok-bg);color:var(--ok)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{border:none;background:none;padding:8px 16px;border-radius:999px;font-weight:700;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--navy);color:var(--on-navy)}
+
+/* admin */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat b{display:block;font-family:var(--f-display);font-size:1.9rem;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:.8rem;color:var(--muted);font-weight:600}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:10px}
+.appt{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.appt summary{list-style:none;display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 16px;cursor:pointer}
+.appt summary::-webkit-details-marker{display:none}
+.appt .when{font-variant-numeric:tabular-nums;line-height:1.25}.appt .when span{display:block;color:var(--muted);font-size:.8rem}
+.appt .who{min-width:0;overflow-wrap:anywhere}.appt .who small{display:block;color:var(--muted)}
+.appt-body{padding:4px 16px 16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px}
+.appt-body .kv{margin-top:12px}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:22px;overflow-x:auto}
+.tabs button{background:none;border:none;padding:12px 16px;font-weight:700;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+.dayboxes{display:flex;flex-wrap:wrap;gap:8px}
+.dayboxes label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 12px;background:var(--surface);font-weight:600;cursor:pointer}
+.blk{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:560px){.appt summary{grid-template-columns:1fr auto}.appt .who{grid-column:1/-1;order:3}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header class="top navbar navbar-expand-lg">
+  <div class="container wrap">
+    <a class="brand navbar-brand" href="#home" aria-label="Aurevia Health home">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="var(--navy)"/><path d="M10 20c0-6 3-10 7-10s5 3 5 6c0 4-4 4-4 8" fill="none" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round"/><circle cx="18" cy="24" r="1.4" fill="var(--gold)"/></svg>
+      <span>Aurevia<small>Health</small></span>
+    </a>
+    <nav class="main navbar-nav" id="nav" aria-label="Main"></nav>
+    <div class="row" style="gap:8px;flex-wrap:nowrap">
+      <a class="btn gold sm" href="#book" data-act="book">Book an appointment</a>
+      <button class="menu-btn navbar-toggler" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<footer class="band-navy" id="foot"></footer>
+
+<div class="wa" id="wa"></div>
+
+<script>
+/* ---------- helpers ---------- */
+window.dataLayer=window.dataLayer||[];
+function track(ev,p){try{window.dataLayer.push(Object.assign({event:ev},p||{}))}catch(e){}}
+const $=(s,r)=>(r||document).querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parseYmd=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const toMin=t=>{const p=t.split(':').map(Number);return p[0]*60+p[1]};
+const fromMin=m=>pad(Math.floor(m/60))+':'+pad(m%60);
+const fmtDate=(s,o)=>parseYmd(s).toLocaleDateString('en-GB',o||{weekday:'short',day:'numeric',month:'short'});
+const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'x';
+const clone=o=>JSON.parse(JSON.stringify(o));
+const HOLDER='tab-'+Math.random().toString(36).slice(2,10);
+const ICON={
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
+  chat:'<path d="M4 5h16v11H9l-5 4z"/>',pin:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',mail:'<path d="M4 6h16v12H4zM4 7l8 6 8-6"/>',
+  ear:'<path d="M7 11a5 5 0 0 1 10 0c0 3-3 3-3 6a2.5 2.5 0 0 1-5 0"/>',chat2:'<path d="M5 5h14v10H10l-5 4z"/><path d="M9 9h6M9 12h4"/>',
+  cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',shield:'<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/>'
+};
+const ic=n=>'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+(ICON[n]||'')+'</svg>';
+
+/* ---------- content ---------- */
+const SERVICES=[
+ {id:'assessment',name:'Hearing assessment',short:'A hearing test',tag:'Find out how well you hear',
+  blurb:'A full check of your hearing, explained in plain language. You leave knowing where you stand and what, if anything, to do next.',
+  list:['A conversation about your hearing and any concerns','A look in your ears with an otoscope','Listening tests, shown on an audiogram','Results and next steps explained clearly']},
+ {id:'hearing-aids',name:'Hearing aid consultation and fitting',short:'Hearing aids',tag:'Choose, fit and tune',
+  blurb:'Talk through your lifestyle and listening needs, compare options and have your hearing aids fitted and programmed.',
+  list:['Review of your hearing results and daily listening situations','Options discussed, with features explained simply','Fitting and programming to your hearing','Guidance on wearing, cleaning and caring for them']},
+ {id:'ear-health',name:'Ear health and wax care',short:'Blocked or uncomfortable ears',tag:'Comfort and ear care',
+  blurb:'For ears that feel blocked, muffled or uncomfortable. We look at your ears and advise on safe care.',
+  list:['Examination of the ear canal and eardrum','Advice on managing earwax safely','Guidance on when to see a doctor','Tips for protecting your ears day to day']},
+ {id:'rehab',name:'Hearing rehabilitation',short:'Support to hear better',tag:'Get more from your hearing',
+  blurb:'Practical support to help you communicate with confidence, whether you are new to hearing aids or have worn them for years.',
+  list:['Listening and communication strategies','Help with difficult settings such as noisy places','Follow-up to fine tune your devices','Support for family and friends too']},
+ {id:'counselling',name:'Hearing counselling',short:'Someone to talk to',tag:'Support that listens',
+  blurb:'Hearing changes can be hard to adjust to. A relaxed conversation about how hearing loss, or tinnitus, affects daily life.',
+  list:['Time to talk through worries and questions','Practical ways to cope day to day','Information on tinnitus and ways to manage it','Guidance on involving family and friends']}
+];
+const AIDS=[
+ {k:'ric',name:'Receiver-in-canal (RIC)',line:'Discreet and widely used',list:['Small body sits behind the ear','Suits mild to severe hearing loss','Rechargeable options available']},
+ {k:'bte',name:'Behind-the-ear (BTE)',line:'Power and easy handling',list:['Larger controls are easier to handle','Suits a wide range, including severe loss','Long battery life, rechargeable options']},
+ {k:'ite',name:'In-the-ear (ITE)',line:'Custom made to your ear',list:['Sits in the outer ear','Made from an impression of your ear','Suits mild to moderately severe loss']},
+ {k:'cic',name:'Completely-in-canal (CIC)',line:'Nearly invisible',list:['Sits deep in the ear canal','Very discreet','Best for mild to moderate loss']}
+];
+const POSTS=[
+ {id:'signs',t:'Five signs it may be time for a hearing test',m:'2 min read',x:'Hearing loss usually creeps in slowly, so many people notice it last. Common signs include asking people to repeat themselves, turning the television up, finding restaurants and group chats hard to follow, feeling that people mumble, and hearing ringing in your ears. If family or friends have mentioned it, take that seriously. A hearing test is quick, painless and gives you clear answers.'},
+ {id:'assessment',t:'What happens at a hearing assessment',m:'3 min read',x:'We start with a chat about your hearing, your health and the situations you find hardest. Then we look in your ears to check the canal and eardrum. You will listen to a series of soft tones through headphones and press a button when you hear them. Results appear on a chart called an audiogram. We explain what it shows in plain language and talk through your options, which may be no action at all.'},
+ {id:'ear-care',t:'Looking after your ears',m:'3 min read',x:'Ears clean themselves, so you rarely need to do more than wipe the outside with a cloth. Avoid cotton buds and other objects in the ear canal, which can push wax deeper or cause injury. Ear candles are not safe or effective. If your ears feel blocked, painful or uncomfortable, book an ear health check. Sudden hearing loss, severe pain or discharge should be seen by a doctor promptly.'},
+ {id:'tinnitus',t:'Living with tinnitus',m:'3 min read',x:'Tinnitus is hearing a sound, such as ringing or buzzing, with no outside source. It is common and often linked to hearing loss or noise exposure. It is usually not a sign of something serious, but see a professional if it is in one ear only, pulses with your heartbeat, started suddenly or comes with dizziness. Many people find relief from sound support, relaxation, counselling and treating any hearing loss.'},
+ {id:'noise',t:'Noise and your hearing',m:'2 min read',x:'Sounds at or above about 85 decibels, such as heavy traffic, power tools and loud venues, can damage hearing over time. The louder the sound, the less time it takes. Use earplugs at concerts and in noisy workplaces, keep headphone volume moderate, and give your ears quiet breaks. Damage from noise is usually permanent, so protecting your hearing early matters.'},
+ {id:'new-aids',t:'Getting used to hearing aids',m:'2 min read',x:'Sounds can seem new or too sharp at first because your brain has to relearn sounds it has been missing. Wear your hearing aids every day, building up from quiet places to busier ones. Keep them clean and charged, and come back for adjustments. Most people settle in over a few weeks, and follow-up visits make a real difference.'}
+];
+const TEAM=[['Lead audiologist','LA'],['Audiologist','AU'],['Patient care coordinator','PC']];
+const DEFAULTS={days:[1,2,3,4,5],start:'09:00',end:'17:00',step:30,buffer:10,
+  durations:{assessment:60,'hearing-aids':45,'ear-health':30,rehab:45,counselling:45},
+  locations:['Main clinic'],blocked:[],clinic:{phone:'',whatsapp:'',email:'',address:''}};
+const svcById=id=>SERVICES.find(s=>s.id===id);
+
+/* ---------- local store (same surface as the db capability) ---------- */
+function makeLocalDb(){
+  const KEY='aurevia-proto-v1';let data={};try{data=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  const subs=[];const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+  const col=c=>data[c]||(data[c]={});
+  const snapDoc=(id,d)=>({id:id,exists:d!==undefined,data:()=>d});
+  const notify=c=>subs.filter(s=>s.c===c).forEach(s=>s.fire());
+  function query(c,f){
+    const mk=()=>{const docs=Object.entries(col(c)).filter(e=>f.every(x=>e[1][x[0]]===x[2])).map(e=>snapDoc(e[0],e[1]));return{docs:docs,size:docs.length,empty:!docs.length}};
+    return{where:(a,op,v)=>query(c,f.concat([[a,op,v]])),get:async()=>mk(),
+      onSnapshot(next){const s={c:c,fire:()=>next(mk())};subs.push(s);setTimeout(s.fire,0);return()=>{const i=subs.indexOf(s);if(i>-1)subs.splice(i,1)}}}}
+  function docRef(c,id){return{
+    get:async()=>snapDoc(id,col(c)[id]),
+    set:async d=>{col(c)[id]=clone(d);save();notify(c)},
+    update:async d=>{if(!col(c)[id])throw{code:'invalid_argument'};Object.assign(col(c)[id],clone(d));save();notify(c)},
+    delete:async()=>{delete col(c)[id];save();notify(c)},
+    acquire:async()=>({acquired:true}),
+    onSnapshot(next){const s={c:c,fire:()=>next(snapDoc(id,col(c)[id]))};subs.push(s);setTimeout(s.fire,0);return()=>{const i=subs.indexOf(s);if(i>-1)subs.splice(i,1)}}}}
+  return{local:true,collection(c){const q=query(c,[]);q.doc=id=>docRef(c,id);return q},doc(p){const a=p.split('/');return docRef(a[0],a[1])}};
+}
+
+/* ---------- state ---------- */
+let DB=null,settings=clone(DEFAULTS),slots=[],bookings=[],enquiries=[],canEdit=!window.claude,downloadsCap=null,shared=false;
+const unsubs=[];let bookingsOn=false,dirty=false;
+const S={route:'home',blogOpen:null,waOpen:false,
+  book:{mode:'new',step:0,service:null,loc:null,date:null,time:null,form:{},errors:{},result:null,busy:false,msg:'',resched:null},
+  manage:{ref:'',email:'',found:null,msg:'',confirmCancel:false},
+  admin:{tab:'appts',f:{q:'',date:'',service:'',loc:'',status:''},open:{},msg:''},
+  enq:null};
+function mergeSettings(s){const o=clone(DEFAULTS);if(!s)return o;
+  ['days','start','end','step','buffer','locations','blocked'].forEach(k=>{if(s[k]!==undefined)o[k]=s[k]});
+  o.durations=Object.assign({},DEFAULTS.durations,s.durations||{});o.clinic=Object.assign({},DEFAULTS.clinic,s.clinic||{});
+  if(!o.locations||!o.locations.length)o.locations=clone(DEFAULTS.locations);return o}
+function connect(d){
+  DB=d;shared=!d.local;unsubs.splice(0).forEach(f=>{try{f()}catch(e){}});bookingsOn=false;
+  unsubs.push(DB.doc('config/settings').onSnapshot(s=>{settings=mergeSettings(s.exists?s.data():null);live()},()=>{}));
+  unsubs.push(DB.collection('slots').onSnapshot(q=>{slots=q.docs.map(x=>x.data());live()},()=>{}));
+  if(d.local||canEdit)ensureBookings();
+}
+function ensureBookings(){
+  if(bookingsOn||!DB)return;bookingsOn=true;
+  unsubs.push(DB.collection('bookings').onSnapshot(q=>{bookings=q.docs.map(x=>x.data());live()},()=>{}));
+  unsubs.push(DB.collection('enquiries').onSnapshot(q=>{enquiries=q.docs.map(x=>x.data());live()},()=>{}));
+}
+function live(){
+  const a=document.activeElement;
+  if(a&&$('#view').contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)){dirty=true;return}
+  render();
+}
+document.addEventListener('focusout',()=>{setTimeout(()=>{const a=document.activeElement;if(dirty&&!(a&&$('#view').contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))){dirty=false;render()}},50)});
+
+/* ---------- availability ---------- */
+function isBlockedDay(date){return settings.blocked.some(b=>b.date<=date&&date<=(b.until||b.date)&&(!b.from||!b.to))}
+function isBlocked(date,t,mins){return settings.blocked.some(b=>b.date<=date&&date<=(b.until||b.date)&&(!b.from||!b.to||(t<toMin(b.to)&&toMin(b.from)<t+mins)))}
+function overlaps(taken,t,mins,exclude){const buf=settings.buffer;return taken.some(x=>x.ref!==exclude&&t<toMin(x.time)+x.mins+buf&&toMin(x.time)<t+mins+buf)}
+function slotsFor(date,svcId,loc,exclude){
+  const out=[],d=parseYmd(date);
+  if(!settings.days.includes(d.getDay())||isBlockedDay(date))return out;
+  const mins=settings.durations[svcId]||45,open=toMin(settings.start),close=toMin(settings.end),now=new Date();
+  const today=date===ymd(now),nowMin=now.getHours()*60+now.getMinutes()+30;
+  const taken=slots.filter(s=>s.date===date&&s.loc===loc);
+  for(let t=open;t+mins<=close;t+=Math.max(5,settings.step)){
+    if(today&&t<nowMin)continue;if(isBlocked(date,t,mins))continue;if(overlaps(taken,t,mins,exclude))continue;out.push(fromMin(t))}
+  return out;
+}
+function newRef(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const a=new Uint8Array(5);crypto.getRandomValues(a);return'AUR-'+Array.from(a,x=>c[x%c.length]).join('')}
+function reminderText(date,time){const d=new Date(parseYmd(date).getTime());const m=toMin(time);d.setHours(Math.floor(m/60),m%60);d.setTime(d.getTime()-864e5);return d.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+
+/* ---------- data actions ---------- */
+async function lockDay(date,loc){const r=await DB.doc('locks/'+date+'_'+slug(loc)).acquire({holder:HOLDER,ttlMs:1500});return r&&r.acquired}
+async function createBooking(b){
+  if(!await lockDay(b.date,b.loc))return{ok:false,reason:'busy'};
+  const snap=await DB.collection('slots').where('date','==',b.date).get();
+  const taken=snap.docs.map(d=>d.data()).filter(s=>s.loc===b.loc);
+  if(overlaps(taken,toMin(b.time),b.mins))return{ok:false,reason:'taken'};
+  await DB.doc('slots/'+b.ref).set({ref:b.ref,date:b.date,time:b.time,loc:b.loc,mins:b.mins});
+  await DB.doc('bookings/'+b.ref).set(b);
+  return{ok:true};
+}
+async function moveBooking(b,date,time){
+  if(!await lockDay(date,b.loc))return{ok:false,reason:'busy'};
+  const snap=await DB.collection('slots').where('date','==',date).get();
+  const taken=snap.docs.map(d=>d.data()).filter(s=>s.loc===b.loc&&s.ref!==b.ref);
+  if(overlaps(taken,toMin(time),b.mins))return{ok:false,reason:'taken'};
+  await DB.doc('slots/'+b.ref).set({ref:b.ref,date:date,time:time,loc:b.loc,mins:b.mins});
+  await DB.doc('bookings/'+b.ref).update({date:date,time:time,status:'booked',messages:(b.messages||[]).concat(['Reschedule confirmation queued (email, WhatsApp)','Reminder due '+reminderText(date,time)])});
+  return{ok:true};
+}
+async function setStatus(b,status){
+  const msgs=(b.messages||[]).slice();
+  if(status==='cancelled'){await DB.doc('slots/'+b.ref).delete();msgs.push('Cancellation message queued (email, WhatsApp)')}
+  if(status==='confirmed')msgs.push('Clinic confirmation queued (email, WhatsApp)');
+  await DB.doc('bookings/'+b.ref).update({status:status,messages:msgs});
+}
+function statusPill(s){const m={booked:['info','Booked'],confirmed:['ok','Confirmed'],completed:['gray','Completed'],cancelled:['bad','Cancelled'],'no-show':['warn','No-show']}[s]||['gray',s];return'<span class="pill '+(m[0]==='info'?'':m[0])+'">'+m[1]+'</span>'}
+const waDigits=()=>String(settings.clinic.whatsapp||'').replace(/\D/g,'');
+const waUrl=t=>'https://wa.me/'+waDigits()+'?text='+encodeURIComponent(t);
+
+/* ---------- views ---------- */
+function bookBtn(id,label,cls){return'<a class="btn '+(cls||'gold')+'" href="#book" data-act="book" data-svc="'+(id||'')+'">'+label+'</a>'}
+function audiogram(){
+  const xs=[56,124,192,260,328,396],f=['250','500','1k','2k','4k','8k'],Y=v=>34+v*2.2;
+  const R=[15,15,20,30,45,55],L=[20,20,25,35,50,65];
+  const grid=[0,20,40,60,80,100].map(v=>'<line x1="56" x2="396" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#2A4672" stroke-width="1"/><text x="46" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>').join('')+
+    xs.map((x,i)=>'<line y1="34" y2="254" x1="'+x+'" x2="'+x+'" stroke="#2A4672" stroke-width="1"/><text x="'+x+'" y="272" text-anchor="middle">'+f[i]+'</text>').join('');
+  const pr=R.map((v,i)=>xs[i]+','+Y(v)).join(' '),pl=L.map((v,i)=>xs[i]+','+Y(v)).join(' ');
+  const mr=R.map((v,i)=>'<circle cx="'+xs[i]+'" cy="'+Y(v)+'" r="6" fill="#0C2147" stroke="#D9B35E" stroke-width="2"/>').join('');
+  const ml=L.map((v,i)=>{const x=xs[i],y=Y(v);return'<path d="M'+(x-5)+' '+(y-5)+'L'+(x+5)+' '+(y+5)+'M'+(x+5)+' '+(y-5)+'L'+(x-5)+' '+(y+5)+'" stroke="#F3F6FB" stroke-width="2" stroke-linecap="round"/>'}).join('');
+  return'<svg class="audiogram" viewBox="0 0 420 304" role="img" aria-label="Sample audiogram chart: hearing level in decibels across frequencies from 250 hertz to 8 kilohertz for the right and left ears">'+
+    '<rect x="56" y="34" width="340" height="44" fill="#F3F6FB" opacity=".08"/><text x="62" y="52">Typical hearing, 20 dB or better</text>'+grid+
+    '<polyline points="'+pr+'" fill="none" stroke="#D9B35E" stroke-width="2"/><polyline points="'+pl+'" fill="none" stroke="#F3F6FB" stroke-width="2" stroke-dasharray="5 4"/>'+mr+ml+
+    '<text x="226" y="294" text-anchor="middle">Frequency (Hz)  ·  Sample audiogram, not a real result</text><text x="6" y="22" class="t">dB HL</text>'+
+    '<g transform="translate(300 22)"><circle cx="0" cy="-4" r="5" fill="#0C2147" stroke="#D9B35E" stroke-width="2"/><text x="10" y="0">Right</text><path d="M62 -9l9 9M71 -9l-9 9" stroke="#F3F6FB" stroke-width="2"/><text x="78" y="0">Left</text></g></svg>';
+}
+function vHome(){
+  return'<section class="band-navy"><div class="container wrap hero"><div class="tagline stack" style="gap:20px"><span class="eyebrow">Aurevia Health Limited</span>'+
+   '<h1>Better hearing. <em>Better health.</em> Better living.</h1><p class="lede">Ear health and hearing care that starts with a simple booking. Choose a time that suits you and we will take it from there.</p>'+
+   '<div class="row">'+bookBtn('','Book an appointment ' + ic('arrow'))+'<a class="btn line" href="'+waUrl('Hello Aurevia, I would like to speak to someone about my hearing.')+'" target="_blank" rel="noopener" data-act="wa">'+ic('chat')+' WhatsApp us</a></div>'+
+   '<p class="small" style="color:var(--on-navy-2)">Booking takes about two minutes. Confirmation and reminders by message.</p></div>'+audiogram()+'</div></section>'+
+  '<section class="container wrap"><div class="section-head"><span class="eyebrow">Start here</span><h2>What do you need help with?</h2></div><div class="grid g3">'+
+   SERVICES.map(s=>'<button class="tile" data-act="book" data-svc="'+s.id+'"><b>'+esc(s.short)+'</b><span>'+esc(s.tag)+'</span><em class="go">Book this ' + ic('arrow')+'</em></button>').join('')+'</div></section>'+
+  '<section class="band-surface"><div class="container wrap"><div class="section-head"><span class="eyebrow">How booking works</span><h2>From “I need help” to booked in minutes</h2></div>'+
+   '<ol class="steps3"><li><h3>Choose a service and place</h3><p class="muted">Pick what you need and where you would like to be seen.</p></li><li><h3>Pick a day and time</h3><p class="muted">You only see times that are free. Booked times disappear automatically.</p></li><li><h3>Confirm your details</h3><p class="muted">Get a reference number straight away, plus a reminder 24 hours before.</p></li></ol></div></section>'+
+  '<section class="container wrap"><div class="section-head"><span class="eyebrow">Why Aurevia</span><h2>Clear, caring hearing care</h2></div>'+whyGrid()+'</section>'+
+  '<section class="band-surface"><div class="container wrap"><div class="section-head"><span class="eyebrow">Patient stories</span><h2>What patients say</h2></div>'+
+   '<div class="placeholder"><span class="ph-tag">To be added</span><p>Real patient reviews will appear here once they have been collected with permission.</p></div></div></section>'+
+  '<section class="band-navy"><div class="container wrap tight"><div class="cta"><div><h2>Ready to hear better?</h2><p class="lede" style="margin-top:8px">Find a time that works for you.</p></div><div class="row">'+bookBtn('','Book an appointment')+'<a class="btn line" href="#contact">Contact us</a></div></div></div></section>';
+}
+function whyGrid(){
+  const w=[['clock','Booked in about two minutes','Pick a service, a time and you are done. No phone queue.'],['chat2','Plain-language results','We explain what your hearing results mean without jargon.'],['mail','Reminders you will see','Confirmation straight away, then a reminder the day before.'],['shield','Your details kept minimal','We ask only for what we need to look after your appointment.']];
+  return'<div class="grid g2">'+w.map(x=>'<div class="why">'+ic(x[0])+'<div><h3>'+x[1]+'</h3><p class="muted">'+x[2]+'</p></div></div>').join('')+'</div>';
+}
+function vAbout(){
+  return'<section class="container wrap"><div class="section-head"><span class="eyebrow">About us</span><h1 style="font-size:clamp(2rem,5vw,3rem)">Hearing care built around you</h1><p class="lede">Aurevia Health Limited is an ear health and diagnostic clinic. We want hearing care to feel clear, calm and easy to access, from your first booking to your follow-up.</p></div>'+
+  '<div class="placeholder"><span class="ph-tag">To be added</span><p>Your clinic story, qualifications and registrations go here.</p></div></section>'+
+  '<section class="band-surface"><div class="container wrap"><div class="section-head"><span class="eyebrow">Our team</span><h2>Meet the people you will see</h2></div><div class="grid g3">'+
+   TEAM.map(t=>'<div class="card stack" style="gap:12px"><div class="avatar" aria-hidden="true">'+t[1]+'</div><div><h3>'+t[0]+'</h3><p class="muted small">Name, photo and qualifications to be added.</p></div></div>').join('')+'</div></div></section>'+
+  '<section class="container wrap"><div class="section-head"><span class="eyebrow">Why Aurevia</span><h2>What you can expect</h2></div>'+whyGrid()+'<div class="row" style="margin-top:28px">'+bookBtn('','Book an appointment')+'</div></section>';
+}
+function vServices(){
+  return'<section class="container wrap"><div class="section-head"><span class="eyebrow">Our services</span><h1 style="font-size:clamp(2rem,5vw,3rem)">Care for every stage of hearing health</h1><p class="lede">Choose a service and book it directly. Appointment lengths below are the defaults and can be changed by the clinic.</p></div><div class="stack">'+
+   SERVICES.map(s=>'<article class="card svc" id="svc-'+s.id+'"><div><div class="row" style="gap:10px;margin-bottom:6px"><h2 style="font-size:1.5rem">'+esc(s.name)+'</h2><span class="pill gray">'+(settings.durations[s.id]||45)+' min</span></div><p class="muted">'+esc(s.blurb)+'</p><ul>'+s.list.map(l=>'<li>'+esc(l)+'</li>').join('')+'</ul></div>'+bookBtn(s.id,'Book this service')+'</article>').join('')+'</div></section>';
+}
+function aidArt(k){
+  const p={ric:'<path d="M30 70c-8-22 0-46 22-48 14-1 22 8 20 22" fill="none" stroke="#D9B35E" stroke-width="6" stroke-linecap="round"/><path d="M72 44c6 4 8 14 2 24" fill="none" stroke="#F3F6FB" stroke-width="3" stroke-linecap="round"/><circle cx="74" cy="72" r="5" fill="#D9B35E"/>',
+   bte:'<path d="M28 74c-10-26 2-52 26-52 18 0 26 12 24 28-1 10-6 20-6 30" fill="none" stroke="#D9B35E" stroke-width="12" stroke-linecap="round"/>',
+   ite:'<ellipse cx="50" cy="50" rx="26" ry="32" fill="#D9B35E"/><ellipse cx="50" cy="50" rx="12" ry="16" fill="#0C2147"/>',
+   cic:'<circle cx="50" cy="50" r="16" fill="#D9B35E"/><circle cx="50" cy="50" r="6" fill="#0C2147"/>'}[k];
+  return'<div class="aid-art"><svg viewBox="0 0 100 100" aria-hidden="true">'+p+'</svg></div>';
+}
+function vAids(){
+  return'<section class="container wrap"><div class="section-head"><span class="eyebrow">Hearing aids</span><h1 style="font-size:clamp(2rem,5vw,3rem)">Find the right hearing aid style</h1><p class="lede">The best choice depends on your hearing, your ears and your daily life. Your audiologist will help you decide. Product photos and models will be added here.</p></div><div class="grid g2">'+
+   AIDS.map(a=>'<article class="card aid">'+aidArt(a.k)+'<h3>'+a.name+'</h3><p class="muted">'+a.line+'</p><ul>'+a.list.map(l=>'<li>'+l+'</li>').join('')+'</ul><button class="btn line" data-act="enq-open" data-k="'+a.name+'">Enquire now</button></article>').join('')+'</div>'+
+   (S.enq?enquiryForm():'')+
+   '<div class="band-surface" style="margin-top:32px;border:1px solid var(--line);border-radius:14px"><div class="cta" style="padding:22px"><div><h3>Not sure which style suits you?</h3><p class="muted">Start with a hearing assessment or a hearing aid consultation.</p></div><div class="row">'+bookBtn('hearing-aids','Book this service')+'</div></div></div></section>';
+}
+function enquiryForm(){
+  const e=S.enq;if(e.done)return'<div class="card stack" id="enq" style="margin-top:20px"><div class="notice ok">Thanks. We have your enquiry about <b>'+esc(e.k)+'</b> and will be in touch.</div><button class="btn line sm" data-act="enq-close" style="align-self:flex-start">Close</button></div>';
+  return'<form class="card stack" id="enq" data-form="enq" novalidate style="margin-top:20px"><h3>Enquire about '+esc(e.k)+'</h3><div class="form-grid"><div class="field'+(e.err.name?' bad':'')+'"><label for="en-name">Full name</label><input id="en-name" data-e="name" value="'+esc(e.name||'')+'" autocomplete="name"><div class="err">'+(e.err.name||'')+'</div></div><div class="field'+(e.err.phone?' bad':'')+'"><label for="en-phone">Phone or WhatsApp</label><input id="en-phone" data-e="phone" value="'+esc(e.phone||'')+'" inputmode="tel" autocomplete="tel"><div class="err">'+(e.err.phone||'')+'</div></div></div><div class="field"><label for="en-msg">Anything we should know? (optional)</label><textarea id="en-msg" data-e="msg">'+esc(e.msg||'')+'</textarea></div><div class="row"><button class="btn gold" type="submit">Send enquiry</button><button type="button" class="btn line" data-act="enq-close">Cancel</button></div></form>';
+}
+function vBlog(){
+  return'<section class="container wrap"><div class="section-head"><span class="eyebrow">Hearing health</span><h1 style="font-size:clamp(2rem,5vw,3rem)">Hearing health, explained</h1><p class="lede">Short, plain guides to hearing loss, tests, hearing aids, ear care, tinnitus and noise.</p></div><div class="stack">'+
+   POSTS.map(p=>{const o=S.blogOpen===p.id;return'<article class="post"><button data-act="post" data-id="'+p.id+'" aria-expanded="'+o+'"><span class="small muted">'+p.m+'</span><h3>'+p.t+'</h3>'+(o?'':'<span class="small" style="color:var(--gold-ink);font-weight:700">Read article</span>')+'</button>'+
+     (o?'<div class="body"><p>'+p.x+'</p><p class="muted small">General information only. It does not replace advice from a clinician.</p><div class="row" style="margin-top:6px">'+bookBtn('assessment','Book a hearing assessment')+'</div></div>':'')+'</article>'}).join('')+'</div></section>';
+}
+function hoursText(){
+  const n=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],d=settings.days.slice().sort((a,b)=>((a+6)%7)-((b+6)%7));
+  if(!d.length)return'By appointment';
+  let runs=[],cur=[d[0]];for(let i=1;i<d.length;i++){if((d[i]+6)%7===(d[i-1]+6)%7+1)cur.push(d[i]);else{runs.push(cur);cur=[d[i]]}}runs.push(cur);
+  return runs.map(r=>r.length>1?n[r[0]]+' to '+n[r[r.length-1]]:n[r[0]]).join(', ')+', '+settings.start+' to '+settings.end;
+}
+function vContact(){
+  const c=settings.clinic,miss='<span class="muted">To be added by the clinic</span>';
+  const dir=c.address?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(c.address):'';
+  return'<section class="container wrap"><div class="section-head"><span class="eyebrow">Contact us</span><h1 style="font-size:clamp(2rem,5vw,3rem)">We are here to help</h1></div><div class="grid g2"><div class="card stack"><dl class="kv" style="margin:0">'+
+   '<dt>Phone</dt><dd>'+(c.phone?esc(c.phone):miss)+'</dd><dt>WhatsApp</dt><dd>'+(c.whatsapp?esc(c.whatsapp):miss)+'</dd><dt>Email</dt><dd>'+(c.email?esc(c.email):miss)+'</dd><dt>Address</dt><dd>'+(c.address?esc(c.address).replace(/\n/g,'<br>'):miss)+'</dd><dt>Opening hours</dt><dd>'+esc(hoursText())+'</dd></dl>'+
+   '<div class="row">'+bookBtn('','Book an appointment')+'<a class="btn line" href="'+waUrl('Hello Aurevia, I have a question.')+'" target="_blank" rel="noopener" data-act="wa">'+ic('chat')+' WhatsApp us</a>'+
+   '<a class="btn line" '+(c.phone?'href="tel:'+esc(c.phone.replace(/[^\d+]/g,''))+'" data-act="call"':'aria-disabled="true"')+'>'+ic('phone')+' Call us</a>'+
+   '<a class="btn line" '+(dir?'href="'+dir+'" target="_blank" rel="noopener" data-act="dir"':'aria-disabled="true"')+'>'+ic('pin')+' Get directions</a></div></div>'+
+   '<div class="placeholder"><span class="ph-tag">Map</span><p>A Google Map of the clinic appears here once the address is added and the map embed is connected on the live site.</p></div></div></section>';
+}
+
+/* booking */
+const STEPS=['Service','Location','Date','Time','Details','Confirmed'];
+function summaryBox(){
+  const b=S.book,s=b.service?svcById(b.service):null;
+  const row=(k,v)=>v?'<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>':'';
+  return'<aside class="card summary"><h3>Your appointment</h3>'+(s||b.date?'<dl>'+row('Service',s&&s.name)+row('Length',s&&(settings.durations[s.id]||45)+' minutes')+row('Location',b.loc)+row('Date',b.date&&fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}))+row('Time',b.time)+'</dl>':'<p class="muted small" style="margin-top:8px">Your choices will appear here as you go.</p>')+'</aside>';
+}
+function vBook(){
+  const b=S.book;
+  if(b.mode==='manage')return vManage();
+  const modeTabs='<div class="seg" role="group" aria-label="Booking mode"><button aria-pressed="true" data-act="mode" data-m="new">New booking</button><button aria-pressed="false" data-act="mode" data-m="manage">Manage a booking</button></div>';
+  const prog='<div class="progress" aria-hidden="true">'+STEPS.map((_,i)=>'<i class="'+(i<=b.step?'on':'')+'"></i>').join('')+'</div>';
+  let body='';
+  if(b.step===0)body='<h2>Which service do you need?</h2><div class="stack" style="margin-top:18px">'+SERVICES.map(s=>'<button class="opt" data-act="pick-svc" data-id="'+s.id+'"><div><b>'+esc(s.name)+'</b><span>'+esc(s.tag)+'</span></div><span class="pill gray">'+(settings.durations[s.id]||45)+' min</span></button>').join('')+'</div>';
+  if(b.step===1)body='<h2>Where would you like to be seen?</h2><div class="stack" style="margin-top:18px">'+settings.locations.map((l,i)=>'<button class="opt" data-act="pick-loc" data-i="'+i+'"><div><b>'+esc(l)+'</b><span>Aurevia Health</span></div>'+ic('arrow')+'</button>').join('')+'</div>';
+  if(b.step===2)body='<h2>Pick a day</h2><p class="muted" style="margin:6px 0 18px">Only days with free times can be chosen.</p>'+dayGrid();
+  if(b.step===3){const t=slotsFor(b.date,b.service,b.loc,b.resched&&b.resched.ref);body='<h2>Pick a time on '+esc(fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}))+'</h2><div style="margin-top:18px">'+(t.length?'<div class="times">'+t.map(x=>'<button class="time" data-act="pick-time" data-t="'+x+'">'+x+'</button>').join('')+'</div>':'<div class="notice warn">No times are left on this day. Please choose another day.</div>')+'</div>';}
+  if(b.step===4)body=b.resched?reschedConfirm():detailsForm();
+  if(b.step===5)body=confirmation();
+  const back=b.step>0&&b.step<5?'<button class="btn line sm" data-act="back" style="align-self:flex-start">Back</button>':'';
+  return'<section class="container wrap tight"><div class="row" style="justify-content:space-between;margin-bottom:6px"><div><span class="eyebrow">Book an appointment</span><p class="small muted">'+(b.resched?'Reschedule '+esc(b.resched.ref)+' · ':'')+'Step '+(b.step+1)+' of 6 · '+STEPS[b.step]+'</p></div>'+(b.step<5&&!b.resched?modeTabs:'')+'</div>'+prog+
+   '<div class="booking"><div class="card stack" style="gap:18px">'+(b.msg?'<div class="notice warn" role="alert">'+esc(b.msg)+'</div>':'')+body+back+'</div>'+(b.step<5?summaryBox():'')+'</div></section>';
+}
+function dayGrid(){
+  const b=S.book,today=new Date();today.setHours(0,0,0,0);const off=(today.getDay()+6)%7;
+  let h='<div class="days">'+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>'<div class="h">'+d+'</div>').join('');
+  for(let i=0;i<off;i++)h+='<div></div>';
+  for(let i=0;i<28;i++){const d=new Date(today.getFullYear(),today.getMonth(),today.getDate()+i),s=ymd(d),n=slotsFor(s,b.service,b.loc,b.resched&&b.resched.ref).length;
+    h+='<button class="day" '+(n?'data-act="pick-date" data-d="'+s+'"':'disabled')+' aria-label="'+esc(fmtDate(s,{weekday:'long',day:'numeric',month:'long'}))+(n?', '+n+' times available':', unavailable')+'"><b>'+d.getDate()+'</b><small>'+((i===0||d.getDate()===1)?d.toLocaleDateString('en-GB',{month:'short'}):(n?n+' free':'–'))+'</small></button>'}
+  return h+'</div>';
+}
+function detailsForm(){
+  const f=S.book.form,e=S.book.errors,fld=(id,label,type,extra)=>'<div class="field'+(e[id]?' bad':'')+'"><label for="f-'+id+'">'+label+'</label><input id="f-'+id+'" data-f="'+id+'" type="'+type+'" value="'+esc(f[id]||'')+'" '+(extra||'')+'><div class="err">'+(e[id]||'')+'</div></div>';
+  return'<h2>Your details</h2><form class="stack" id="detail-form" data-form="book" novalidate><div class="form-grid">'+
+   fld('name','Full name','text','autocomplete="name"')+fld('phone','Phone or WhatsApp number','tel','inputmode="tel" autocomplete="tel"')+fld('email','Email address','email','autocomplete="email"')+fld('age','Age','number','min="0" max="120" inputmode="numeric"')+'</div>'+
+   '<div class="field"><label for="f-notes">Notes (optional)</label><textarea id="f-notes" data-f="notes" placeholder="Anything we should know before your visit?">'+esc(f.notes||'')+'</textarea><div class="small muted">Please do not include detailed medical history here.</div></div>'+
+   '<label class="check"><input type="checkbox" id="f-consent" data-f="consent" '+(f.consent?'checked':'')+'><span>I agree that Aurevia Health may contact me about this appointment by phone, WhatsApp, SMS or email.'+(e.consent?'<br><span style="color:var(--bad)">'+e.consent+'</span>':'')+'</span></label>'+
+   '<button class="btn gold" type="submit" '+(S.book.busy?'disabled':'')+'>'+(S.book.busy?'Booking…':'Confirm booking')+'</button></form>';
+}
+function reschedConfirm(){
+  const b=S.book;return'<h2>Confirm your new time</h2><p>'+esc(fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}))+' at <b>'+esc(b.time)+'</b>, '+esc(b.loc)+'.</p><div class="row"><button class="btn gold" data-act="do-resched" '+(b.busy?'disabled':'')+'>Confirm new time</button></div>';
+}
+function confirmation(){
+  const b=S.book,r=b.result,s=svcById(r.service);
+  return'<div class="refbox"><span class="small" style="color:var(--on-navy-2)">'+(b.resched?'Rescheduled. Your reference':'You are booked in. Your reference')+'</span><b>'+esc(r.ref)+'</b></div>'+
+   '<dl class="kv" style="margin:0"><dt>Service</dt><dd>'+esc(r.serviceName)+'</dd><dt>When</dt><dd>'+esc(fmtDate(r.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+' at '+esc(r.time)+'</dd><dt>Where</dt><dd>'+esc(r.loc)+'</dd><dt>Name</dt><dd>'+esc(r.name)+'</dd></dl>'+
+   '<div class="notice ok">A confirmation goes to your email and WhatsApp, and a reminder follows 24 hours before (due '+esc(reminderText(r.date,r.time))+').</div>'+
+   '<div class="row"><a class="btn gold" href="'+waUrl('Hello Aurevia, my booking reference is '+r.ref+'.')+'" target="_blank" rel="noopener" data-act="wa">'+ic('chat')+' Message us on WhatsApp</a>'+(downloadsCap?'<button class="btn line" data-act="ics">'+ic('cal')+' Add to calendar</button>':'')+'<button class="btn line" data-act="mode" data-m="manage">Manage booking</button><button class="btn line" data-act="again">Book another</button></div>';
+}
+function vManage(){
+  const m=S.manage,f=m.found;
+  const modeTabs='<div class="seg" role="group" aria-label="Booking mode"><button aria-pressed="false" data-act="mode" data-m="new">New booking</button><button aria-pressed="true" data-act="mode" data-m="manage">Manage a booking</button></div>';
+  let card='';
+  if(f){card='<div class="card stack" style="margin-top:6px"><div class="row" style="justify-content:space-between"><h3>'+esc(f.ref)+'</h3>'+statusPill(f.status)+'</div><dl class="kv" style="margin:0"><dt>Service</dt><dd>'+esc(f.serviceName)+'</dd><dt>When</dt><dd>'+esc(fmtDate(f.date,{weekday:'long',day:'numeric',month:'long'}))+' at '+esc(f.time)+'</dd><dt>Where</dt><dd>'+esc(f.loc)+'</dd></dl>'+
+    (f.status==='booked'||f.status==='confirmed'?'<div class="row"><button class="btn line" data-act="start-resched">Reschedule</button>'+(m.confirmCancel?'<button class="btn danger" data-act="do-cancel">Yes, cancel my appointment</button><button class="btn line" data-act="keep">Keep it</button>':'<button class="btn danger" data-act="ask-cancel">Cancel appointment</button>')+'</div>':'')+'</div>'}
+  return'<section class="container wrap tight"><div class="row" style="justify-content:space-between;margin-bottom:18px"><div><span class="eyebrow">Book an appointment</span><p class="small muted">Manage a booking</p></div>'+modeTabs+'</div><div class="card stack" style="max-width:560px"><h2>Find your booking</h2><p class="muted">Enter the reference from your confirmation and the email you booked with.</p>'+
+   (m.msg?'<div class="notice '+(m.msgType||'warn')+'" role="alert">'+esc(m.msg)+'</div>':'')+
+   '<form class="stack" data-form="lookup" novalidate><div class="field"><label for="m-ref">Reference</label><input id="m-ref" data-m="ref" value="'+esc(m.ref)+'" placeholder="AUR-XXXXX" autocapitalize="characters"></div><div class="field"><label for="m-email">Email</label><input id="m-email" data-m="email" type="email" value="'+esc(m.email)+'" autocomplete="email"></div><button class="btn gold" type="submit">Find booking</button></form></div>'+card+'</section>';
+}
+
+/* admin */
+function vAdmin(){
+  if(!canEdit)return'<section class="container wrap"><div class="card stack" style="max-width:560px"><span class="eyebrow">Staff area</span><h2>Clinic staff only</h2><p class="muted">The booking dashboard is for authorised staff. Sign in with an editor account to open it.</p><a class="btn gold" href="#home" style="align-self:flex-start">Back to site</a></div></section>';
+  ensureBookings();
+  const a=S.admin,tabs=[['appts','Appointments'],['settings','Calendar and settings'],['enq','Enquiries ('+enquiries.length+')']];
+  return'<section class="container wrap tight"><div class="section-head" style="margin-bottom:14px"><span class="eyebrow">Staff dashboard</span><h1 style="font-size:clamp(1.8rem,4vw,2.4rem)">Appointments</h1></div><div class="tabs" role="tablist">'+tabs.map(t=>'<button role="tab" aria-selected="'+(a.tab===t[0])+'" data-act="atab" data-t="'+t[0]+'">'+t[1]+'</button>').join('')+'</div>'+
+   (a.msg?'<div class="notice ok" style="margin-bottom:14px" role="status">'+esc(a.msg)+'</div>':'')+
+   (a.tab==='appts'?adminAppts():a.tab==='settings'?adminSettings():adminEnq())+'</section>';
+}
+function sortedBookings(){return bookings.slice().sort((x,y)=>(x.date+x.time).localeCompare(y.date+y.time))}
+function filtered(){
+  const f=S.admin.f,q=f.q.toLowerCase();
+  return sortedBookings().filter(b=>(!q||[b.name,b.ref,b.phone,b.email].join(' ').toLowerCase().includes(q))&&(!f.date||b.date===f.date)&&(!f.service||b.service===f.service)&&(!f.loc||b.loc===f.loc)&&(!f.status||b.status===f.status));
+}
+function apptCard(b){
+  const open=S.admin.open[b.ref],live=b.status==='booked'||b.status==='confirmed';
+  return'<details class="appt" data-ref="'+b.ref+'" '+(open?'open':'')+'><summary><div class="when"><b>'+esc(b.time)+'</b><span>'+esc(fmtDate(b.date))+'</span></div><div class="who"><b>'+esc(b.name)+'</b>'+(b.sample?' <span class="pill warn">Sample</span>':'')+'<small>'+esc(b.serviceName)+' · '+esc(b.loc)+'</small></div>'+statusPill(b.status)+'</summary><div class="appt-body">'+
+   '<dl class="kv"><dt>Reference</dt><dd>'+esc(b.ref)+'</dd><dt>Phone</dt><dd>'+esc(b.phone)+'</dd><dt>Email</dt><dd>'+esc(b.email)+'</dd><dt>Age</dt><dd>'+esc(b.age)+'</dd><dt>Patient notes</dt><dd>'+(esc(b.notes)||'<span class="muted">None</span>')+'</dd><dt>Messages</dt><dd>'+(b.messages||[]).map(m=>'<div class="small">'+esc(m)+'</div>').join('')+'</dd></dl>'+
+   '<div class="field"><label for="n-'+b.ref+'">Clinic notes</label><textarea id="n-'+b.ref+'">'+esc(b.clinicNotes||'')+'</textarea></div>'+
+   '<div class="row"><button class="btn line sm" data-act="save-note" data-ref="'+b.ref+'">Save note</button>'+
+   (live?(b.status==='booked'?'<button class="btn gold sm" data-act="astatus" data-s="confirmed" data-ref="'+b.ref+'">Confirm</button>':'')+'<button class="btn line sm" data-act="astatus" data-s="completed" data-ref="'+b.ref+'">Complete</button><button class="btn line sm" data-act="astatus" data-s="no-show" data-ref="'+b.ref+'">No-show</button><button class="btn danger sm" data-act="astatus" data-s="cancelled" data-ref="'+b.ref+'">Cancel</button>':'')+'</div>'+
+   (live?'<div class="row" style="align-items:flex-end"><div class="field"><label for="rd-'+b.ref+'">Reschedule to</label><input type="date" id="rd-'+b.ref+'" data-act-change="rdate" data-ref="'+b.ref+'" min="'+ymd(new Date())+'"></div><div class="field"><label for="rt-'+b.ref+'">Time</label><select id="rt-'+b.ref+'"><option value="">Pick a date first</option></select></div><button class="btn line sm" data-act="amove" data-ref="'+b.ref+'">Move</button></div>':'')+
+   '</div></details>';
+}
+function adminAppts(){
+  const t=ymd(new Date()),all=bookings,act=b=>b.status==='booked'||b.status==='confirmed';
+  const stat=[['Total bookings',all.length],['Upcoming',all.filter(b=>act(b)&&b.date>=t).length],['Completed',all.filter(b=>b.status==='completed').length],['Cancelled',all.filter(b=>b.status==='cancelled').length],['No-shows',all.filter(b=>b.status==='no-show').length]];
+  const today=sortedBookings().filter(b=>b.date===t&&b.status!=='cancelled');
+  const f=S.admin.f;
+  return'<div class="stats">'+stat.map(s=>'<div class="stat"><b>'+s[1]+'</b><span>'+s[0]+'</span></div>').join('')+'</div>'+
+   '<h2 style="font-size:1.4rem;margin:28px 0 12px">Today</h2>'+(today.length?today.map(apptCard).join(''):'<p class="muted">No appointments today.</p>')+
+   '<div class="row" style="justify-content:space-between;margin:28px 0 12px"><h2 style="font-size:1.4rem">All appointments</h2><div class="row"><button class="btn line sm" data-act="export">Export CSV</button>'+(bookings.some(b=>b.sample)?'<button class="btn line sm" data-act="clear-sample">Remove sample data</button>':'')+'</div></div>'+
+   '<div class="filters" style="margin-bottom:14px"><div class="field"><label for="fq">Search</label><input id="fq" data-af="q" value="'+esc(f.q)+'" placeholder="Name, phone, reference"></div><div class="field"><label for="fd">Date</label><input id="fd" type="date" data-af="date" value="'+esc(f.date)+'"></div>'+
+   '<div class="field"><label for="fs">Service</label><select id="fs" data-af="service"><option value="">All</option>'+SERVICES.map(s=>'<option value="'+s.id+'" '+(f.service===s.id?'selected':'')+'>'+esc(s.short)+'</option>').join('')+'</select></div>'+
+   '<div class="field"><label for="fl">Location</label><select id="fl" data-af="loc"><option value="">All</option>'+settings.locations.map(l=>'<option '+(f.loc===l?'selected':'')+'>'+esc(l)+'</option>').join('')+'</select></div>'+
+   '<div class="field"><label for="fst">Status</label><select id="fst" data-af="status"><option value="">All</option>'+['booked','confirmed','completed','cancelled','no-show'].map(s=>'<option '+(f.status===s?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div>'+
+   '<div id="appt-list">'+apptList()+'</div>'+
+   '<p class="small muted" style="margin-top:20px">Prototype note: confirmations and reminders are queued and listed on each booking. Sending them by email, WhatsApp or SMS needs a messaging service connected.</p>';
+}
+function apptList(){const l=filtered();if(!bookings.length)return'<div class="placeholder"><p>No bookings yet. Book one from the public site, or load a few examples to explore the dashboard.</p><button class="btn gold sm" style="margin-top:12px" data-act="sample">Load sample bookings</button></div>';return l.length?l.map(apptCard).join(''):'<p class="muted">No appointments match these filters.</p>'}
+function adminSettings(){
+  const s=settings,dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],c=s.clinic;
+  return'<form class="stack" id="settings-form" data-form="settings" style="gap:24px" novalidate>'+
+   '<div class="card stack"><h3>Working days and hours</h3><div class="dayboxes">'+[1,2,3,4,5,6,0].map(d=>'<label><input type="checkbox" name="day" value="'+d+'" '+(s.days.includes(d)?'checked':'')+'>'+dn[d]+'</label>').join('')+'</div>'+
+   '<div class="form-grid"><div class="field"><label for="s-start">Opens</label><input id="s-start" type="time" value="'+s.start+'"></div><div class="field"><label for="s-end">Closes</label><input id="s-end" type="time" value="'+s.end+'"></div><div class="field"><label for="s-step">Slot spacing (minutes)</label><input id="s-step" type="number" min="5" step="5" value="'+s.step+'"></div><div class="field"><label for="s-buf">Buffer between appointments (minutes)</label><input id="s-buf" type="number" min="0" step="5" value="'+s.buffer+'"></div></div></div>'+
+   '<div class="card stack"><h3>Appointment length (minutes)</h3><div class="form-grid">'+SERVICES.map(v=>'<div class="field"><label for="d-'+v.id+'">'+esc(v.short)+'</label><input id="d-'+v.id+'" type="number" min="10" step="5" value="'+(s.durations[v.id]||45)+'"></div>').join('')+'</div></div>'+
+   '<div class="card stack"><h3>Clinic details</h3><p class="muted small">Used on the contact page and in WhatsApp links. Include the country code for WhatsApp.</p><div class="form-grid"><div class="field"><label for="c-phone">Phone</label><input id="c-phone" value="'+esc(c.phone)+'"></div><div class="field"><label for="c-wa">WhatsApp number</label><input id="c-wa" value="'+esc(c.whatsapp)+'" placeholder="e.g. 447700900000"></div><div class="field"><label for="c-email">Email</label><input id="c-email" value="'+esc(c.email)+'"></div></div><div class="field"><label for="c-addr">Address</label><textarea id="c-addr">'+esc(c.address)+'</textarea></div>'+
+   '<div class="field"><label for="s-locs">Locations (one per line)</label><textarea id="s-locs">'+esc(s.locations.join('\n'))+'</textarea></div></div>'+
+   '<div class="row"><button class="btn gold" type="submit">Save settings</button></div></form>'+
+   '<div class="card stack" style="margin-top:24px"><h3>Blocked dates and times</h3><p class="muted small">Holidays, meetings, leave or fully booked periods. Leave the times empty to block the whole day.</p>'+
+   (s.blocked.length?s.blocked.map((b,i)=>'<div class="blk"><div><b>'+esc(fmtDate(b.date))+(b.until&&b.until!==b.date?' to '+esc(fmtDate(b.until)):'')+'</b> '+(b.from&&b.to?esc(b.from)+' to '+esc(b.to):'All day')+'<div class="small muted">'+esc(b.reason||'')+'</div></div><button class="btn line sm" data-act="unblock" data-i="'+i+'">Remove</button></div>').join(''):'<p class="muted">Nothing blocked.</p>')+
+   '<form class="form-grid" data-form="block" novalidate><div class="field"><label for="b-date">From date</label><input id="b-date" type="date" required></div><div class="field"><label for="b-until">To date (optional)</label><input id="b-until" type="date"></div><div class="field"><label for="b-from">From time</label><input id="b-from" type="time"></div><div class="field"><label for="b-to">To time</label><input id="b-to" type="time"></div><div class="field"><label for="b-reason">Reason</label><input id="b-reason" placeholder="Bank holiday, leave…"></div><div class="field" style="justify-content:flex-end"><button class="btn line" type="submit">Block</button></div></form></div>';
+}
+function adminEnq(){return enquiries.length?enquiries.slice().sort((a,b)=>b.at.localeCompare(a.at)).map(e=>'<div class="card" style="margin-bottom:10px"><b>'+esc(e.name)+'</b> · '+esc(e.phone)+'<div class="small muted">'+esc(e.product)+' · '+esc(new Date(e.at).toLocaleString('en-GB'))+'</div>'+(e.msg?'<p style="margin-top:6px">'+esc(e.msg)+'</p>':'')+'</div>').join(''):'<p class="muted">No hearing aid enquiries yet.</p>'}
+
+/* ---------- shell ---------- */
+const ROUTES={home:vHome,about:vAbout,services:vServices,'hearing-aids':vAids,blog:vBlog,contact:vContact,book:vBook,admin:vAdmin};
+const NAV=[['home','Home'],['about','About us'],['services','Services'],['hearing-aids','Hearing aids'],['blog','Hearing health'],['contact','Contact']];
+const TITLES={home:'Aurevia Health',about:'About us',services:'Our services','hearing-aids':'Hearing aids',blog:'Hearing health',contact:'Contact us',book:'Book an appointment',admin:'Staff dashboard'};
+function render(){
+  $('#nav').innerHTML=NAV.map(n=>'<a class="nav-link" href="#'+n[0]+'" '+(S.route===n[0]?'aria-current="page"':'')+'>'+n[1]+'</a>').join('');
+  $('#view').innerHTML=(ROUTES[S.route]||vHome)();
+  $('#view').querySelectorAll('.field input:not([type="checkbox"]):not([type="radio"]), .field textarea').forEach(el=>el.classList.add('form-control'));
+  $('#view').querySelectorAll('.field select').forEach(el=>el.classList.add('form-select'));
+  $('#view').querySelectorAll('input[type="checkbox"]').forEach(el=>el.classList.add('form-check-input'));
+  const c=settings.clinic;
+  $('#foot').innerHTML='<div class="container wrap"><div><h3>Aurevia Health Limited</h3><p>Better Hearing. Better Health. Better Living.</p></div><div><h3>Explore</h3>'+NAV.map(n=>'<a href="#'+n[0]+'">'+n[1]+'</a>').join('')+'<a href="#book">Book an appointment</a></div><div><h3>Contact</h3><p>'+(c.phone?esc(c.phone):'Phone to be added')+'</p><p>'+(c.email?esc(c.email):'Email to be added')+'</p><p>'+esc(hoursText())+'</p><a href="#admin" style="margin-top:10px">Staff sign in</a></div></div>';
+  $('#wa').innerHTML=(S.waOpen?'<div class="wa-menu" role="menu"><small>Chat with Aurevia on WhatsApp</small>'+[['Book appointment','Hello Aurevia, I would like to book an appointment.'],['Hearing aid enquiry','Hello Aurevia, I have a question about hearing aids.'],['Reschedule','Hello Aurevia, I need to reschedule my appointment.'],['Speak to Aurevia','Hello Aurevia, I would like to speak to someone.']].map(x=>'<a role="menuitem" href="'+waUrl(x[1])+'" target="_blank" rel="noopener" data-act="wa">'+x[0]+'</a>').join('')+'</div>':'')+'<button class="wa-btn" data-act="wa-toggle" aria-expanded="'+S.waOpen+'">'+ic('chat')+'<span>Chat on WhatsApp</span></button>';
+  document.title=TITLES[S.route]===TITLES.home?'Aurevia Health':TITLES[S.route]+' | Aurevia Health';
+}
+function go(){const h=(location.hash||'#home').slice(1);S.route=ROUTES[h]?h:'home';S.waOpen=false;$('#nav').classList.remove('open');$('#menu').setAttribute('aria-expanded','false');render();window.scrollTo(0,0)}
+window.addEventListener('hashchange',go);
+$('#menu').addEventListener('click',()=>{const o=$('#nav').classList.toggle('open');$('#menu').setAttribute('aria-expanded',o)});
+
+/* ---------- actions ---------- */
+function startBooking(svc){
+  const keep=S.book.form;S.book={mode:'new',step:0,service:null,loc:null,date:null,time:null,form:keep,errors:{},result:null,busy:false,msg:'',resched:null};
+  if(svc){S.book.service=svc;S.book.step=1;if(settings.locations.length===1){S.book.loc=settings.locations[0];S.book.step=2}}
+}
+function validate(f){
+  const e={};
+  if(!f.name||f.name.trim().length<2)e.name='Please enter your full name.';
+  if(!f.phone||f.phone.replace(/\D/g,'').length<7)e.phone='Please enter a phone or WhatsApp number.';
+  if(!f.email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email))e.email='Please enter a valid email address.';
+  const a=Number(f.age);if(f.age===undefined||f.age===''||isNaN(a)||a<0||a>120)e.age='Please enter an age between 0 and 120.';
+  if(!f.consent)e.consent='Please tick to agree so we can contact you.';
+  return e;
+}
+function icsText(r){
+  const st=r.date.replace(/-/g,'')+'T'+r.time.replace(':','')+'00',em=toMin(r.time)+r.mins,en=r.date.replace(/-/g,'')+'T'+pad(Math.floor(em/60))+pad(em%60)+'00';
+  return['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Aurevia Health//Booking//EN','BEGIN:VEVENT','UID:'+r.ref+'@aurevia','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART:'+st,'DTEND:'+en,'SUMMARY:'+r.serviceName+' at Aurevia Health','LOCATION:'+r.loc,'DESCRIPTION:Reference '+r.ref,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+}
+function csvText(list){
+  const h=['Reference','Date','Time','Service','Location','Status','Name','Phone','Email','Age','Patient notes','Clinic notes'];
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  return[h.map(q).join(',')].concat(list.map(b=>[b.ref,b.date,b.time,b.serviceName,b.loc,b.status,b.name,b.phone,b.email,b.age,b.notes,b.clinicNotes].map(q).join(','))).join('\r\n');
+}
+async function saveFile(name,data,fallback){
+  if(downloadsCap){try{await downloadsCap.save({filename:name,data:data});return true}catch(e){if(e&&e.code==='declined')return false}}
+  try{await navigator.clipboard.writeText(data);S.admin.msg='Download is not available here, so the CSV was copied to your clipboard.'}catch(e){S.admin.msg='Download is not available in this view.'}
+  render();return false;
+}
+function sampleData(){
+  const days=settings.days.length?settings.days:[1,2,3,4,5],t=new Date();t.setHours(0,0,0,0);
+  const work=dir=>{const o=[];let d=new Date(t);for(let i=0;i<40&&o.length<4;i++){d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+dir);if(days.includes(d.getDay()))o.push(ymd(d))}return o};
+  const fut=work(1),past=work(-1),todayOk=days.includes(t.getDay());
+  const loc=settings.locations[0];
+  const rows=[];if(todayOk){rows.push([ymd(t),'10:00','assessment','confirmed']);rows.push([ymd(t),'14:30','ear-health','booked'])}
+  rows.push([fut[0],'09:00','hearing-aids','booked'],[fut[0],'11:00','assessment','confirmed'],[fut[1],'15:00','rehab','booked'],[fut[2],'10:30','counselling','booked'],[past[0],'10:00','assessment','completed'],[past[1],'13:00','ear-health','cancelled'],[past[2],'09:30','hearing-aids','no-show']);
+  const nm=['Sample Patient A','Sample Patient B','Sample Patient C','Sample Patient D','Sample Patient E','Sample Patient F','Sample Patient G','Sample Patient H','Sample Patient I','Sample Patient J'];
+  return rows.map((r,i)=>{const s=svcById(r[2]),ref='AUR-S'+String(i+1).padStart(4,'0');return{ref:ref,sample:true,service:r[2],serviceName:s.name,loc:loc,date:r[0],time:r[1],mins:settings.durations[r[2]]||45,name:nm[i],phone:'07000 000000',email:'sample'+(i+1)+'@example.com',age:60+i,notes:'',status:r[3],messages:['Confirmation queued (email, WhatsApp)'],createdAt:new Date().toISOString()}});
+}
+async function writeSettings(next){settings=next;await DB.doc('config/settings').set(next);render()}
+
+const ACT={
+ book(t,e){track('book_click');startBooking(t.dataset.svc||'');if(location.hash==='#book'){e.preventDefault();render()}},
+ wa(){track('whatsapp_click')},call(){track('call_click')},dir(){track('directions_click')},
+ 'wa-toggle'(){S.waOpen=!S.waOpen;render()},
+ post(t){S.blogOpen=S.blogOpen===t.dataset.id?null:t.dataset.id;render()},
+ 'enq-open'(t){S.enq={k:t.dataset.k,err:{}};render();const f=$('#enq');if(f)f.scrollIntoView({block:'center'})},
+ 'enq-close'(){S.enq=null;render()},
+ mode(t){S.book.mode=t.dataset.m;S.manage.msg='';render()},
+ 'pick-svc'(t){S.book.service=t.dataset.id;S.book.msg='';if(settings.locations.length===1){S.book.loc=settings.locations[0];S.book.step=2}else S.book.step=1;render()},
+ 'pick-loc'(t){S.book.loc=settings.locations[+t.dataset.i];S.book.step=2;render()},
+ 'pick-date'(t){S.book.date=t.dataset.d;S.book.time=null;S.book.msg='';S.book.step=3;render()},
+ 'pick-time'(t){S.book.time=t.dataset.t;S.book.step=4;render()},
+ back(){const b=S.book;b.msg='';if(b.step===2&&settings.locations.length===1)b.step=b.resched?2:0;else b.step=Math.max(b.resched?2:0,b.step-1);render()},
+ again(){startBooking('');render()},
+ async ics(){const r=S.book.result;try{await downloadsCap.save({filename:'aurevia-'+r.ref+'.ics',data:icsText(r)})}catch(e){}},
+ async 'do-resched'(){
+  const b=S.book;if(b.busy)return;b.busy=true;render();
+  const rec=b.resched,res=await moveBooking(rec,b.date,b.time);b.busy=false;
+  if(!res.ok){b.msg=res.reason==='busy'?'Someone else is booking at the same moment. Please try again.':'That time was just taken. Please choose another.';b.step=3;render();return}
+  b.result=Object.assign({},rec,{date:b.date,time:b.time});b.step=5;render();
+ },
+ 'ask-cancel'(){S.manage.confirmCancel=true;render()},keep(){S.manage.confirmCancel=false;render()},
+ async 'do-cancel'(){const f=S.manage.found;await setStatus(f,'cancelled');S.manage.found=Object.assign({},f,{status:'cancelled'});S.manage.confirmCancel=false;S.manage.msg='Your appointment has been cancelled. A confirmation is on its way.';S.manage.msgType='ok';render()},
+ 'start-resched'(){const f=S.manage.found;S.book={mode:'new',step:2,service:f.service,loc:f.loc,date:null,time:null,form:S.book.form,errors:{},result:null,busy:false,msg:'',resched:f};render()},
+ atab(t){S.admin.tab=t.dataset.t;S.admin.msg='';render()},
+ async astatus(t){const b=bookings.find(x=>x.ref===t.dataset.ref);if(!b)return;await setStatus(b,t.dataset.s)},
+ async 'save-note'(t){const r=t.dataset.ref,el=document.getElementById('n-'+r);await DB.doc('bookings/'+r).update({clinicNotes:el.value});S.admin.msg='Note saved.';render()},
+ async amove(t){
+  const r=t.dataset.ref,b=bookings.find(x=>x.ref===r),d=document.getElementById('rd-'+r).value,tm=document.getElementById('rt-'+r).value;
+  if(!d||!tm){S.admin.msg='Choose a new date and time first.';render();return}
+  const res=await moveBooking(b,d,tm);S.admin.msg=res.ok?'Appointment moved to '+fmtDate(d)+' at '+tm+'.':'That time is no longer free. Please pick another.';render();
+ },
+ async export(){const l=filtered();if(!l.length){S.admin.msg='There are no appointments to export.';render();return}const ok=await saveFile('aurevia-appointments.csv',csvText(l));if(ok){S.admin.msg='Export ready.';render()}},
+ async sample(){for(const b of sampleData()){if(b.status==='booked'||b.status==='confirmed')await DB.doc('slots/'+b.ref).set({ref:b.ref,date:b.date,time:b.time,loc:b.loc,mins:b.mins});await DB.doc('bookings/'+b.ref).set(b)}S.admin.msg='Sample bookings loaded. They are marked Sample.';render()},
+ async 'clear-sample'(){for(const b of bookings.filter(x=>x.sample)){await DB.doc('slots/'+b.ref).delete();await DB.doc('bookings/'+b.ref).delete()}S.admin.msg='Sample bookings removed.';render()},
+ async unblock(t){const n=clone(settings);n.blocked.splice(+t.dataset.i,1);await writeSettings(n)}
+};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const fn=ACT[t.dataset.act];if(fn)fn(t,e)});
+document.addEventListener('toggle',e=>{const d=e.target;if(d&&d.classList&&d.classList.contains('appt'))S.admin.open[d.dataset.ref]=d.open},true);
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.f){const b=S.book;b.form[t.dataset.f]=t.type==='checkbox'?t.checked:t.value;if(b.errors[t.dataset.f]){delete b.errors[t.dataset.f];const fl=t.closest('.field');if(fl){fl.classList.remove('bad');const er=fl.querySelector('.err');if(er)er.textContent=''}}}
+  if(t.dataset.e&&S.enq){S.enq[t.dataset.e]=t.value}
+  if(t.dataset.m&&(t.dataset.m==='ref'||t.dataset.m==='email'))S.manage[t.dataset.m]=t.value;
+  if(t.dataset.af){S.admin.f[t.dataset.af]=t.value;const l=$('#appt-list');if(l)l.innerHTML=apptList()}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.f==='consent'){S.book.form.consent=t.checked}
+  if(t.dataset.af){S.admin.f[t.dataset.af]=t.value;const l=$('#appt-list');if(l)l.innerHTML=apptList()}
+  if(t.dataset.actChange==='rdate'){
+    const b=bookings.find(x=>x.ref===t.dataset.ref),sel=document.getElementById('rt-'+t.dataset.ref);if(!b||!sel)return;
+    const times=t.value?slotsFor(t.value,b.service,b.loc,b.ref):[];
+    sel.innerHTML=times.length?times.map(x=>'<option>'+x+'</option>').join(''):'<option value="">No times free</option>';
+  }
+});
+document.addEventListener('submit',async e=>{
+  const f=e.target.closest('[data-form]');if(!f)return;e.preventDefault();
+  const k=f.dataset.form;
+  if(k==='book'){
+    const b=S.book;if(b.busy)return;b.errors=validate(b.form);
+    if(Object.keys(b.errors).length){render();const x=$('.field.bad input');if(x)x.focus();return}
+    b.busy=true;render();
+    const s=svcById(b.service),rec={ref:newRef(),service:b.service,serviceName:s.name,loc:b.loc,date:b.date,time:b.time,mins:settings.durations[b.service]||45,
+      name:b.form.name.trim(),phone:b.form.phone.trim(),email:b.form.email.trim(),age:b.form.age,notes:(b.form.notes||'').trim(),status:'booked',createdAt:new Date().toISOString(),
+      messages:['Confirmation queued (email, WhatsApp)','Reminder due '+reminderText(b.date,b.time)]};
+    let res;try{res=await createBooking(rec)}catch(err){res={ok:false,reason:'error'}}
+    b.busy=false;
+    if(!res.ok){b.msg=res.reason==='taken'?'That time was just taken by someone else. Please choose another.':res.reason==='busy'?'Someone else is booking at the same moment. Please try again.':'We could not save your booking. Please try again.';b.step=3;render();return}
+    track('booking_created',{service:b.service});b.result=rec;b.step=5;render();window.scrollTo(0,0);
+  }
+  if(k==='lookup'){
+    const m=S.manage,ref=m.ref.trim().toUpperCase();m.msg='';m.found=null;m.confirmCancel=false;
+    if(!ref||!m.email.trim()){m.msg='Enter your reference and email.';m.msgType='warn';render();return}
+    let d=null;try{const sn=await DB.doc('bookings/'+ref).get();d=sn.exists?sn.data():null}catch(err){}
+    if(!d||String(d.email).toLowerCase()!==m.email.trim().toLowerCase()){m.msg='We could not find a booking with those details. Check the reference and email.';m.msgType='warn'}
+    else m.found=d;
+    render();
+  }
+  if(k==='enq'){
+    const q=S.enq;q.err={};if(!q.name||q.name.trim().length<2)q.err.name='Please enter your name.';if(!q.phone||q.phone.replace(/\D/g,'').length<7)q.err.phone='Please enter a phone or WhatsApp number.';
+    if(Object.keys(q.err).length){render();return}
+    const id='enq-'+Date.now().toString(36);
+    try{await DB.doc('enquiries/'+id).set({id:id,product:q.k,name:q.name.trim(),phone:q.phone.trim(),msg:(q.msg||'').trim(),at:new Date().toISOString()})}catch(err){}
+    track('aid_enquiry',{product:q.k});q.done=true;render();
+  }
+  if(k==='settings'){
+    const v=id=>document.getElementById(id).value,n=clone(settings);
+    n.days=Array.from(document.querySelectorAll('input[name="day"]:checked')).map(x=>+x.value);
+    n.start=v('s-start')||n.start;n.end=v('s-end')||n.end;n.step=Math.max(5,+v('s-step')||30);n.buffer=Math.max(0,+v('s-buf')||0);
+    SERVICES.forEach(s=>{n.durations[s.id]=Math.max(10,+v('d-'+s.id)||45)});
+    n.clinic={phone:v('c-phone').trim(),whatsapp:v('c-wa').trim(),email:v('c-email').trim(),address:v('c-addr').trim()};
+    const locs=v('s-locs').split('\n').map(x=>x.trim()).filter(Boolean);n.locations=locs.length?locs:clone(DEFAULTS.locations);
+    await writeSettings(n);S.admin.msg='Settings saved.';render();
+  }
+  if(k==='block'){
+    const v=id=>document.getElementById(id).value,d=v('b-date');if(!d){S.admin.msg='Choose a date to block.';render();return}
+    const n=clone(settings),b={date:d,reason:v('b-reason').trim()};if(v('b-until')&&v('b-until')>d)b.until=v('b-until');if(v('b-from')&&v('b-to')){b.from=v('b-from');b.to=v('b-to')}
+    n.blocked.push(b);n.blocked.sort((x,y)=>x.date.localeCompare(y.date));await writeSettings(n);S.admin.msg='Blocked.';render();
+  }
+});
+
+/* ---------- start ---------- */
+connect(makeLocalDb());
+go();
+if(window.claude&&window.claude.use){
+  Promise.all([window.claude.use('user'),window.claude.use('downloads')]).then(async r=>{
+    downloadsCap=r[1];try{canEdit=r[0]?await r[0].canEdit():false}catch(e){canEdit=false}
+    if(shared&&canEdit)ensureBookings();render();
+  }).catch(()=>{});
+  window.claude.use('db').then(d=>{if(d){connect(d)}}).catch(()=>{});
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body></html>
